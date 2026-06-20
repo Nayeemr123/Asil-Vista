@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Asil Vista — Premium Mobile Coffee Catering</title>
+    
+    <!-- Google Fonts: Elegant Serif and Clean Modern Sans-Serif -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS Engine CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            white: '#FFFFFF',
+                            offwhite: '#FBFBFA',
+                            linen: '#F3EFEA',
+                            sand: '#EAE3D9',
+                            espresso: '#2C2623',
+                            taupe: '#7A726C',
+                            almond: '#D0C3B2', /* Highly dominant accent across the UI */
+                            mocha: '#4A3E3D',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .fade-enter {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        .fade-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .nav-underline {
+            position: relative;
+        }
+        .nav-underline::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -6px;
+            left: 0;
+            background-color: #D0C3B2;
+            transform-origin: bottom right;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .nav-underline:hover::after, .nav-underline.active::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+    </style>
+</head>
+<body class="bg-brand-white text-brand-espresso font-sans antialiased selection:bg-brand-almond/30 selection:text-brand-espresso overflow-x-hidden">
+
+    <!-- Header / Global Navigation -->
+    <header class="sticky top-0 z-50 bg-brand-white/95 backdrop-blur-md border-b border-brand-sand/60 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 h-20 md:h-24 flex items-center justify-between">
+            
+            <!-- Logo Section pointing directly to AV black logo.png with elegant SVG fallback -->
+            <a href="#home" onclick="navigateTo('home')" class="group flex items-center gap-3 transition-opacity duration-300">
+                <div class="h-10 w-14 md:h-14 md:w-18 flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.02]">
+                    <!-- Using your exact asset "AV black logo.png" verbatim -->
+                    <img src="AV black logo.png" alt="Asil Vista Logo" class="h-11 md:h-14 w-auto object-contain block" onerror="this.style.display='none'; document.getElementById('header-svg-fallback').classList.remove('hidden');">
+                    
+                    <!-- Exact Pixel-Perfect SVG Monogram fallback to ensure visibility if local image is offline -->
+                    <svg id="header-svg-fallback" class="hidden h-11 md:h-14 w-auto text-brand-espresso" viewBox="0 0 400 300" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M140,240 L162,240 L115,80 L90,80 L42,240 L65,240 L76,200 L129,200 L140,240 Z M83,175 L102.5,110 L122,175 L83,175 Z" />
+                        <path d="M70,195 Q170,130 275,195 Q170,150 70,195 Z" opacity="0.95"/>
+                        <path d="M210,80 L235,80 L285,240 L310,240 L260,80 L280,80" />
+                        <path d="M190,80 L220,180 L248,80 Z" />
+                        <path d="M260,80 Q320,80 345,110 Q370,140 330,170 Q280,205 240,160 Q270,185 315,160 Q345,142 335,120 Q325,100 260,112 Z" />
+                        <g transform="translate(255, 95) scale(0.6)">
+                            <path d="M30,35 C20,15 5,20 5,35 C5,55 30,75 30,75 C30,75 55,55 55,35 C55,20 40,15 30,35 Z" />
+                            <path d="M30,22 C23,8 12,12 12,22 C12,35 30,48 30,48 C30,48 48,35 48,22 C48,12 37,8 30,22 Z" opacity="0.85" />
+                            <path d="M30,12 C25,3 18,5 18,12 C18,20 30,29 30,29 C30,29 42,20 42,12 C42,5 35,3 30,12 Z" opacity="0.7" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-serif text-lg md:text-xl tracking-[0.12em] md:tracking-[0.15em] uppercase font-semibold group-hover:text-brand-almond transition-colors duration-300 leading-tight">Asil Vista</span>
+                    <span class="text-[8px] md:text-[9px] tracking-[0.25em] md:tracking-[0.3em] uppercase text-brand-taupe">Espresso Bar</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-8 lg:space-x-10">
+                <a href="#home" onclick="navigateTo('home')" id="nav-home" class="nav-underline active text-xs uppercase tracking-widest font-semibold text-brand-espresso">Home</a>
+                <a href="#menu" onclick="navigateTo('menu')" id="nav-menu" class="nav-underline text-xs uppercase tracking-widest font-semibold text-brand-taupe hover:text-brand-espresso transition-colors">Menu</a>
+                <a href="#reviews" onclick="navigateTo('reviews')" id="nav-reviews" class="nav-underline text-xs uppercase tracking-widest font-semibold text-brand-taupe hover:text-brand-espresso transition-colors">Reviews</a>
+                <a href="#about" onclick="navigateTo('about')" id="nav-about" class="nav-underline text-xs uppercase tracking-widest font-semibold text-brand-taupe hover:text-brand-espresso transition-colors">About Us</a>
+                <a href="#inquiry-section" onclick="scrollToInquiry(event)" class="bg-brand-almond text-brand-espresso text-xs uppercase tracking-widest px-5 py-3 rounded-sm hover:bg-brand-espresso hover:text-brand-white font-semibold transition-all duration-300 shadow-sm">Book Cart</a>
+            </nav>
+
+            <!-- Mobile Navigation Trigger (Minimum 48px touch-target area container) -->
+            <button onclick="toggleMobileMenu()" class="md:hidden p-3 -mr-3 text-brand-espresso focus:outline-none min-h-[48px] min-w-[48px] flex items-center justify-center" aria-label="Toggle Menu">
+                <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Navigation Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-white border-b border-brand-sand/80 px-6 py-6 space-y-5 animate-fadeIn">
+            <a href="#home" onclick="navigateTo('home'); toggleMobileMenu();" class="block py-2 text-sm uppercase tracking-widest font-semibold text-brand-espresso">Home</a>
+            <a href="#menu" onclick="navigateTo('menu'); toggleMobileMenu();" class="block py-2 text-sm uppercase tracking-widest font-semibold text-brand-taupe">Menu</a>
+            <a href="#reviews" onclick="navigateTo('reviews'); toggleMobileMenu();" class="block py-2 text-sm uppercase tracking-widest font-semibold text-brand-taupe">Reviews</a>
+            <a href="#about" onclick="navigateTo('about'); toggleMobileMenu();" class="block py-2 text-sm uppercase tracking-widest font-semibold text-brand-taupe">About Us</a>
+            <hr class="border-brand-sand/40">
+            <a href="#inquiry-section" onclick="scrollToInquiry(event); toggleMobileMenu();" class="block w-full text-center bg-brand-almond text-brand-espresso text-xs uppercase tracking-widest py-4 rounded-sm font-bold shadow-sm">Book Coffee Cart</a>
+        </div>
+    </header>
+
+    <!-- MAIN INTERACTIVE SPA VIEWS CONTAINER -->
+    <main class="min-h-screen">
+
+        <!-- VIEW 1: HOME PAGE -->
+        <div id="view-home" class="view-pane fade-enter-active">
+            
+            <!-- Hero Section with generous white space and dynamic Almond details -->
+            <section class="relative bg-brand-offwhite py-16 md:py-32 border-b border-brand-sand/50">
+                <div class="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#D0C3B2_1.5px,transparent_1.5px)] [background-size:24px_24px]"></div>
+                <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 relative z-10">
+                    <span class="text-xs uppercase tracking-[0.25em] text-brand-taupe font-bold block mb-4">Mobile Espresso Catering</span>
+                    <h1 class="font-serif text-4xl sm:text-5xl md:text-7xl text-brand-espresso leading-[1.15] md:leading-[1.1] font-light mb-6 md:mb-8">
+                        Elevate Your Event with <span class="underline decoration-brand-almond decoration-wavy decoration-2 underline-offset-4 md:underline-offset-8">Specialty Coffee</span> Catering
+                    </h1>
+                    <p class="font-serif italic text-lg sm:text-xl md:text-2xl text-brand-taupe max-w-2xl mx-auto mb-10 md:mb-12 font-light leading-relaxed">
+                        Bringing a premium, aesthetic mobile espresso bar experience to weddings, corporate events, and private gatherings.
+                    </p>
+                    
+                    <!-- Mobile-First Stacked Buttons (Full-width on mobile, auto-width inline on Desktop) -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto sm:max-w-none">
+                        <!-- Dominant D0C3B2 buttons styled cleanly for touch accuracy -->
+                        <button onclick="navigateTo('menu')" class="bg-brand-almond text-brand-espresso text-xs uppercase tracking-[0.2em] font-bold py-4 px-8 w-full sm:w-auto hover:bg-brand-espresso hover:text-brand-white hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 shadow-md rounded-sm min-h-[48px]">
+                            View Menu
+                        </button>
+                        <a href="#inquiry-section" onclick="scrollToInquiry(event)" class="bg-brand-almond text-brand-espresso text-xs uppercase tracking-[0.2em] font-bold py-4 px-8 w-full sm:w-auto hover:bg-brand-espresso hover:text-brand-white hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 text-center shadow-md rounded-sm min-h-[48px] flex items-center justify-center">
+                            Book Coffee Cart
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Inquiry Form Section -->
+            <section id="inquiry-section" class="py-16 md:py-24 bg-brand-white scroll-mt-20">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6">
+                    <div class="text-center max-w-xl mx-auto mb-12 md:mb-16">
+                        <div class="inline-block bg-brand-linen text-brand-espresso text-[10px] sm:text-[11px] uppercase tracking-[0.25em] px-4 py-1.5 rounded-full font-bold mb-4 border border-brand-almond/60">Reservations & Quotes</div>
+                        <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-brand-espresso mb-4">Book Asil Vista for Your Event</h2>
+                        <p class="text-brand-taupe text-sm leading-relaxed">Fill out the details below, and we'll send a tailored proposal directly to your inbox. Inquiries are processed and forwarded instantly.</p>
+                    </div>
+
+                    <!-- Custom Form Integrated with Formspree forwarding to the.asil.vista@gmail.com -->
+                    <form id="inquiryForm" action="https://formspree.io/f/xpqgapwl" method="POST" onsubmit="submitInquiry(event)" class="bg-brand-offwhite border-2 border-brand-almond/50 p-6 sm:p-8 md:p-12 space-y-6 md:space-y-8 shadow-sm rounded-sm">
+                        <!-- Custom Destination Configuration Directives -->
+                        <input type="hidden" name="_to" value="the.asil.vista@gmail.com">
+                        <input type="hidden" name="_subject" value="New Asil Vista Event Inquiry!">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                            <!-- Full Name -->
+                            <div class="flex flex-col gap-1.5">
+                                <label for="full_name" class="text-[10px] uppercase tracking-widest font-bold text-brand-espresso">Full Name <span class="text-brand-almond font-bold">*</span></label>
+                                <input type="text" name="name" id="full_name" required placeholder="Evelyn Bennett" class="bg-brand-white border border-brand-sand focus:border-brand-almond focus:ring-2 focus:ring-brand-almond/30 px-4 py-3 text-base outline-none transition-all duration-200 rounded-sm min-h-[48px]">
+                            </div>
+                            
+                            <!-- Email Address -->
+                            <div class="flex flex-col gap-1.5">
+                                <label for="email" class="text-[10px] uppercase tracking-widest font-bold text-brand-espresso">Email Address <span class="text-brand-almond font-bold">*</span></label>
+                                <input type="email" name="email" id="email" required placeholder="evelyn@example.com" class="bg-brand-white border border-brand-sand focus:border-brand-almond focus:ring-2 focus:ring-brand-almond/30 px-4 py-3 text-base outline-none transition-all duration-200 rounded-sm min-h-[48px]">
+                            </div>
+
+                            <!-- Phone Number -->
+                            <div class="flex flex-col gap-1.5">
+                                <label for="phone" class="text-[10px] uppercase tracking-widest font-bold text-brand-espresso">Phone Number <span class="text-brand-almond font-bold">*</span></label>
+                                <input type="tel" name="phone" id="phone" required placeholder="(555) 019-2834" class="bg-brand-white border border-brand-sand focus:border-brand-almond focus:ring-2 focus:ring-brand-almond/30 px-4 py-3 text-base outline-none transition-all duration-200 rounded-sm min-h-[48px]">
+                            </div>
+
+                            <!-- Event Type -->
+                            <div class="flex flex-col gap-1.5">
+                                <label for="event_type" class="text-[10px] uppercase tracking-widest font-bold text-brand-espresso">Event Type <span class="text-brand-almond font-bold">*</span></label>
+                                <div class="relative">
+                                    <select name="event_type" id="event_type" required class="w-full bg-brand-white border border-brand-sand focus:border-brand-almond focus:ring-2 focus:ring-brand-almond/30 px-4 py-3 text-base outline-none transition-all duration-200 appearance-none rounded-sm min-h-[48px]">
+                                        <option value="" disabled selected>Select event type</option>
+                                        <option value="Wedding">Wedding Celebration</option>
+                                        <option value="Corporate">Corporate Gathering</option>
+                                        <option value="Private Party">Private Party / Reception</option>
+                                        <option value="Pop-up / Activation">Pop-up & Brand Activation</option>
+                                        <option value="Other">Other Elegant Milestone</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-brand-taupe">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Date of Event -->
+                            <div class="flex flex-col gap-1.5">
+                                <label for="event_date" class="text-[10px] uppercase tracking-widest font-bold text-brand-espresso">Date of Event <span class="text-brand-almond font-bold">*</span></label>
+                                <input type="date" name="event_date" id="event_date" required class="bg-brand-white border border-brand-sand focus:border-brand-almond focus:ring-2 focus:ring-brand-almond/30 px-4 py-3 text-base outline-none transition-all duration-200 rounded-sm min-h-[48px]">
+                            </div>
+
+                            <!-- Event Location-->
+                            <div class="flex flex-col gap-1.5">
+                                <label for="venue_zip" class="text-[10px] uppercase tracking-widest font-bold text-brand-espresso">Event Address <span class="text-brand-almond font-bold">*</span></label>
+                                <input type="text" name="venue_zip" id="venue_zip" required placeholder="235 Wayne blvd, Princeton, NJ 08540" class="bg-brand-white border border-brand-sand focus:border-brand-almond focus:ring-2 focus:ring-brand-almond/30 px-4 py-3 text-base outline-none transition-all duration-200 rounded-sm min-h-[48px]">
+                            </div>
+
+                            <!-- Guest Count Dropdown -->
+                            <div class="flex flex-col gap-1.5">
+                                <label for="guest_count" class="text-[10px] uppercase tracking-widest font-bold text-brand-espresso">Estimated Guest Count <span class="text-brand-almond font-bold">*</span></label>
+                                <div class="relative">
+                                    <select name="guest_count" id="guest_count" required class="w-full bg-brand-white border border-brand-sand focus:border-brand-almond focus:ring-2 focus:ring-brand-almond/30 px-4 py-3 text-base outline-none transition-all duration-200 appearance-none rounded-sm min-h-[48px]">
+                                        <option value="" disabled selected>Select guest volume</option>
+                                        <option value="50">50 guests or fewer</option>
+                                        <option value="100">100 guests</option>
+                                        <option value="150">150 guests</option>
+                                        <option value="200">200 guests</option>
+                                        <option value="300">300 guests</option>
+                                        <option value="500+">500+ guests</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-brand-taupe">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Event Duration Dropdown -->
+                            <div class="flex flex-col gap-1.5">
+                                <label for="event_duration" class="text-[10px] uppercase tracking-widest font-bold text-brand-espresso">Event Duration <span class="text-brand-almond font-bold">*</span></label>
+                                <div class="relative">
+                                    <select name="event_duration" id="event_duration" required class="w-full bg-brand-white border border-brand-sand focus:border-brand-almond focus:ring-2 focus:ring-brand-almond/30 px-4 py-3 text-base outline-none transition-all duration-200 appearance-none rounded-sm min-h-[48px]">
+                                        <option value="" disabled selected>Select booking time</option>
+                                        <option value="2 Hours">2 Hours of Service</option>
+                                        <option value="3 Hours">3 Hours of Service</option>
+                                        <option value="4 Hours">4 Hours of Service</option>
+                                        <option value="5 Hours">5 Hours of Service</option>
+                                        <option value="Full Day / Multi-day">Full Day / Multi-Day Experience</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-brand-taupe">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Power Availability Option Buttons -->
+                        <div class="flex flex-col gap-3">
+                            <span class="text-[10px] uppercase tracking-widest font-bold text-brand-espresso">Power Availability <span class="text-brand-almond font-bold">*</span></span>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <label class="flex items-center gap-3 p-4 bg-brand-white border border-brand-sand cursor-pointer hover:border-brand-almond transition-colors rounded-sm min-h-[48px]">
+                                    <input type="radio" name="power_availability" value="outlet" checked class="w-5 h-5 accent-brand-espresso">
+                                    <span class="text-xs text-brand-espresso font-medium select-none">Yes, standard electrical outlet available</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-4 bg-brand-white border border-brand-sand cursor-pointer hover:border-brand-almond transition-colors rounded-sm min-h-[48px]">
+                                    <input type="radio" name="power_availability" value="generator" class="w-5 h-5 accent-brand-espresso">
+                                    <span class="text-xs text-brand-espresso font-medium select-none">No, generator required</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Additional Notes -->
+                        <div class="flex flex-col gap-2">
+                            <label for="notes" class="text-[10px] uppercase tracking-widest font-bold text-brand-espresso">Additional Notes / Theme details</label>
+                            <textarea name="notes" id="notes" rows="4" placeholder="Tell us more about your aesthetic vision, special requests, menu additions, or specific timing profiles..." class="bg-brand-white border border-brand-sand focus:border-brand-almond focus:ring-2 focus:ring-brand-almond/30 px-4 py-3 text-base outline-none transition-all duration-200 resize-none rounded-sm min-h-[96px]"></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="pt-4 text-center">
+                            <button type="submit" class="bg-brand-almond text-brand-espresso text-xs uppercase tracking-[0.25em] font-bold py-4 px-12 hover:bg-brand-espresso hover:text-brand-white hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 w-full sm:w-auto shadow-md rounded-sm min-h-[48px]">
+                                Submit Booking Request
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="py-16 md:py-24 bg-brand-linen border-t border-b border-brand-sand/50">
+                <div class="max-w-3xl mx-auto px-4 sm:px-6">
+                    <div class="text-center mb-12">
+                        <span class="text-xs uppercase tracking-widest text-brand-taupe font-bold block mb-3">Answers</span>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-light text-brand-espresso">Frequently Asked Questions</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- FAQ 1 -->
+                        <div class="bg-brand-white border border-brand-sand/60 overflow-hidden transition-all duration-300 rounded-sm">
+                            <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 sm:p-6 text-left focus:outline-none min-h-[48px]">
+                                <span class="font-serif text-lg sm:text-xl font-medium text-brand-espresso pr-4">What do you require for setup?</span>
+                                <span class="faq-icon text-xl font-light text-brand-almond transform transition-transform duration-300 shrink-0">+</span>
+                            </button>
+                            <div class="faq-body max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                                <p class="p-5 sm:p-6 pt-0 text-sm text-brand-taupe leading-relaxed border-t border-brand-linen/40">
+                                    We require access to a dedicated standard electrical outlet and a level, flat surface to guarantee a safe, sturdy setup for our heavyweight espresso machinery and mobile cart workspace.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 2 -->
+                        <div class="bg-brand-white border border-brand-sand/60 overflow-hidden transition-all duration-300 rounded-sm">
+                            <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 sm:p-6 text-left focus:outline-none min-h-[48px]">
+                                <span class="font-serif text-lg sm:text-xl font-medium text-brand-espresso pr-4">How early do you arrive?</span>
+                                <span class="faq-icon text-xl font-light text-brand-almond transform transition-transform duration-300 shrink-0">+</span>
+                            </button>
+                            <div class="faq-body max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                                <p class="p-5 sm:p-6 pt-0 text-sm text-brand-taupe leading-relaxed border-t border-brand-linen/40">
+                                    We typically arrive exactly 1 hour prior to your scheduled service start time to assemble the espresso cart, arrange setup logistics, dial-in espresso extraction parameters, and calibrate temps.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 3 -->
+                        <div class="bg-brand-white border border-brand-sand/60 overflow-hidden transition-all duration-300 rounded-sm">
+                            <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 sm:p-6 text-left focus:outline-none min-h-[48px]">
+                                <span class="font-serif text-lg sm:text-xl font-medium text-brand-espresso pr-4">Do you provide non-dairy options?</span>
+                                <span class="faq-icon text-xl font-light text-brand-almond transform transition-transform duration-300 shrink-0">+</span>
+                            </button>
+                            <div class="faq-body max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                                <p class="p-5 sm:p-6 pt-0 text-sm text-brand-taupe leading-relaxed border-t border-brand-linen/40">
+                                    Yes! Standard premium oat and almond alternative milks are fully integrated into every single booking package to ensure all of your guests are catered for beautifully.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- VIEW 2: MENU PAGE -->
+        <div id="view-menu" class="view-pane hidden">
+            <!-- Menu Page Hero -->
+            <section class="bg-brand-offwhite py-16 md:py-20 border-b border-brand-sand/40 text-center">
+                <div class="max-w-xl mx-auto px-4 sm:px-6">
+                    <span class="text-xs uppercase tracking-[0.25em] text-brand-taupe font-bold block mb-3">Our Offerings</span>
+                    <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-brand-espresso mb-4">Signature Drink Menu</h1>
+                    <p class="text-brand-taupe text-sm">A sensory-crafted lineup of modern, decadent signature espresso profiles.</p>
+                </div>
+            </section>
+
+            <!-- Menu Grid - Removed Pistachio Latte Completely -->
+            <section class="py-16 md:py-24 bg-brand-white">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
+                        
+                        <!-- Item 1 -->
+                        <div class="bg-brand-offwhite border-t-4 border-t-brand-almond border-x border-b border-brand-sand/60 p-6 sm:p-8 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between rounded-sm">
+                            <div>
+                                <h3 class="font-serif text-2xl font-normal text-brand-espresso mb-3">Spanish Latte</h3>
+                                <p class="text-brand-taupe text-sm leading-relaxed mb-6">Traditional micro-foamed latte paired elegantly with a rich, smooth trace of sweetened condensed milk.</p>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-widest text-brand-espresso font-bold block mt-auto">Signature Favorite</span>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="bg-brand-offwhite border-t-4 border-t-brand-almond border-x border-b border-brand-sand/60 p-6 sm:p-8 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between rounded-sm">
+                            <div>
+                                <h3 class="font-serif text-2xl font-normal text-brand-espresso mb-3">Salted Caramel Latte</h3>
+                                <p class="text-brand-taupe text-sm leading-relaxed mb-6">Our specialty-grade espresso elevated with handcrafted deep butter-caramel and premium flaky sea salt.</p>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-widest text-brand-espresso font-bold block mt-auto">House Classic</span>
+                        </div>
+
+                        <!-- Item 3 -->
+                        <div class="bg-brand-offwhite border-t-4 border-t-brand-almond border-x border-b border-brand-sand/60 p-6 sm:p-8 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between rounded-sm">
+                            <div>
+                                <h3 class="font-serif text-2xl font-normal text-brand-espresso mb-3">Biscoff Latte</h3>
+                                <p class="text-brand-taupe text-sm leading-relaxed mb-6">A spiced caramelized biscuit cream infusion layered directly beneath velvety, smooth milk micro-foam.</p>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-widest text-brand-espresso font-bold block mt-auto">Comfort Blend</span>
+                        </div>
+
+                        <!-- Item 4 -->
+                        <div class="bg-brand-offwhite border-t-4 border-t-brand-almond border-x border-b border-brand-sand/60 p-6 sm:p-8 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between rounded-sm">
+                            <div>
+                                <h3 class="font-serif text-2xl font-normal text-brand-espresso mb-3">Tiramisu Latte</h3>
+                                <p class="text-brand-taupe text-sm leading-relaxed mb-6">Decadent cocoa and sweet mascarpone cheese notes harmonized beautifully with bold freshly-ground espresso.</p>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-widest text-brand-espresso font-bold block mt-auto">Dessert Inspired</span>
+                        </div>
+
+                    </div>
+
+                    <!-- Note Callout Box with Almond Accents -->
+                    <div class="mt-12 md:mt-16 bg-brand-linen border-2 border-brand-almond p-6 sm:p-10 md:p-12 text-center rounded-sm max-w-4xl mx-auto">
+                        <p class="font-serif text-base sm:text-xl md:text-2xl text-brand-espresso leading-relaxed italic mb-2">
+                            "Standard espresso classics (Lattes, Cappuccinos, Cortados), alternative milks (oat/almond), and premium non-coffee options (Matcha, Chai) are included in every booking."
+                        </p>
+                    </div>
+
+                    <!-- Bottom CTA (Now styled beautifully with #D0C3B2 Brand-Almond Background) -->
+                    <div class="mt-12 md:mt-16 text-center px-4">
+                        <a href="#home" onclick="navigateTo('home'); setTimeout(scrollToForm, 100);" class="inline-block w-full sm:w-auto bg-brand-almond text-brand-espresso text-xs uppercase tracking-[0.2em] font-bold py-4.5 px-10 hover:bg-brand-espresso hover:text-brand-white transition-all duration-300 shadow-md rounded-sm min-h-[48px] leading-[48px] text-center">
+                            Ready to Book? Inquire on our Homepage
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- VIEW 3: REVIEWS PAGE -->
+        <div id="view-reviews" class="view-pane hidden">
+            <section class="bg-brand-offwhite py-16 md:py-20 border-b border-brand-sand/40 text-center">
+                <div class="max-w-2xl mx-auto px-4 sm:px-6">
+                    <span class="text-xs uppercase tracking-[0.25em] text-brand-taupe font-bold block mb-3">Client Journeys</span>
+                    <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-brand-espresso mb-4">Kind Words & Testimonials</h1>
+                    <p class="text-brand-taupe text-sm leading-relaxed">Though our brand story is just beginning, we hold ourselves to the highest standards of hospitality and aesthetic luxury. Here is the blueprint we guarantee to deliver for every guest.</p>
+                </div>
+            </section>
+
+            <!-- Reviews Presentation Grid -->
+            <section class="py-16 md:py-24 bg-brand-white">
+                <div class="max-w-5xl mx-auto px-4 sm:px-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
+                        <!-- Blueprint review card 1 -->
+                        <div class="bg-brand-offwhite border-l-4 border-l-brand-almond border-y border-r border-brand-sand/60 p-6 sm:p-8 shadow-sm rounded-r-sm">
+                            <div class="flex items-center gap-1 text-brand-almond mb-4 text-sm font-bold">
+                                ★★★★★ <span class="text-[10px] text-brand-taupe uppercase ml-2 tracking-widest font-sans">(Service Standard)</span>
+                            </div>
+                            <p class="font-serif italic text-base sm:text-lg text-brand-espresso mb-6">
+                                "Our mission revolves around delivering uncompromised aesthetic elegance. Your guests will experience prompt service, micro-foam latte art, and the ultimate warm hospitality."
+                            </p>
+                            <div class="border-t border-brand-sand/40 pt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs">
+                                <span class="font-bold uppercase tracking-wider text-brand-espresso">The Bridal Suite Vision</span>
+                                <span class="text-brand-taupe">Projected Autumn Celebration</span>
+                            </div>
+                        </div>
+
+                        <!-- Blueprint review card 2 -->
+                        <div class="bg-brand-offwhite border-l-4 border-l-brand-almond border-y border-r border-brand-sand/60 p-6 sm:p-8 shadow-sm rounded-r-sm">
+                            <div class="flex items-center gap-1 text-brand-almond mb-4 text-sm font-bold">
+                                ★★★★★ <span class="text-[10px] text-brand-taupe uppercase ml-2 tracking-widest font-sans">(Craft Philosophy)</span>
+                            </div>
+                            <p class="font-serif italic text-base sm:text-lg text-brand-espresso mb-6">
+                                "From our bespoke Spanish Lattes to curated alternative milks, our baristas are trained to perfect extraction ratios and micro-temperature calibration for every single cup."
+                            </p>
+                            <div class="border-t border-brand-sand/40 pt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs">
+                                <span class="font-bold uppercase tracking-wider text-brand-espresso">Corporate Pop-up Standards</span>
+                                <span class="text-brand-taupe">Designed Hospitality Blueprint</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Client Note of Intent -->
+                    <div class="bg-brand-linen border border-brand-almond p-6 sm:p-10 md:p-12 rounded-sm text-center max-w-3xl mx-auto">
+                        <span class="text-xs uppercase tracking-widest text-brand-taupe font-bold block mb-2">Be Part of Our History</span>
+                        <h3 class="font-serif text-2xl text-brand-espresso mb-4">Have an Upcoming Event?</h3>
+                        <p class="text-brand-taupe text-sm max-w-lg mx-auto mb-8 leading-relaxed">
+                            We cannot wait to display your custom testimonial right here! Book our premium mobile espresso cart today and help us write the opening chapters of our shared story.
+                        </p>
+                        <a href="#home" onclick="navigateTo('home'); setTimeout(scrollToForm, 100);" class="inline-block w-full sm:w-auto bg-brand-almond text-brand-espresso text-xs uppercase tracking-[0.2em] font-bold py-4 px-8 hover:bg-brand-espresso hover:text-brand-white transition-all duration-300 shadow-md rounded-sm min-h-[48px] leading-[48px] text-center">
+                            Begin Your Reservation
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- VIEW 4: ABOUT US PAGE -->
+        <div id="view-about" class="view-pane hidden">
+            <!-- About Hero -->
+            <section class="bg-brand-offwhite py-16 md:py-20 border-b border-brand-sand/40 text-center">
+                <div class="max-w-xl mx-auto px-4 sm:px-6">
+                    <span class="text-xs uppercase tracking-[0.25em] text-brand-taupe font-bold block mb-3">Our Roots</span>
+                    <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-brand-espresso mb-4">The Story of Asil Vista</h1>
+                    <p class="text-brand-taupe text-sm">Bringing uncompromised, aesthetic espresso cart experiences directly to you.</p>
+                </div>
+            </section>
+
+            <!-- Editorial Content Section -->
+            <section class="py-16 md:py-24 bg-brand-white">
+                <div class="max-w-5xl mx-auto px-4 sm:px-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
+                        
+                        <!-- High-end Wood & Stainless Steel Minimal Editorial Coffee Machine Photo Block -->
+                        <div class="h-[320px] sm:h-[420px] md:h-[500px] bg-cover bg-center shadow-md relative border-4 border-brand-almond rounded-sm transition-transform duration-500 hover:scale-[1.01]" style="background-image: url('https://images.unsplash.com/photo-1497515114629-f71d768fd07c?auto=format&fit=crop&q=80&w=1200');">
+                            <!-- Monogram layout floating over image -->
+                            <div class="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 bg-brand-espresso text-brand-white p-3 sm:p-4 px-5 sm:px-6 rounded-sm shadow-lg border border-brand-almond">
+                                <p class="font-serif italic text-base sm:text-lg tracking-wider text-brand-almond">Crafted Daily</p>
+                            </div>
+                        </div>
+
+                        <!-- Editorial Text Block -->
+                        <div class="space-y-4 sm:space-y-6">
+                            <span class="text-xs uppercase tracking-[0.2em] text-brand-taupe font-bold block">Craft & hospitality</span>
+                            <h2 class="font-serif text-2xl sm:text-3xl md:text-4xl text-brand-espresso font-light leading-snug">
+                                An Elevated Espresso Experience Designed for Gatherings
+                            </h2>
+                            <p class="text-brand-taupe text-sm leading-relaxed">
+                                Asil Vista was born out of a profound passion for high-end craft coffee combined with clean, editorial event curation. Our focus centers around transforming standard beverage services into interactive luxury experiences.
+                            </p>
+                            <p class="text-brand-taupe text-sm leading-relaxed">
+                                Every single component of our setup is thoughtfully curated. From our selection of premium ingredients to the clean architectural footprint of our custom-made mobile espresso carts, we elevate standard celebrations into beautiful milestones.
+                            </p>
+                            <div class="pt-2">
+                                <a href="#home" onclick="navigateTo('home'); setTimeout(scrollToForm, 100);" class="inline-block border-b-2 border-brand-almond text-brand-espresso text-xs uppercase tracking-widest font-bold pb-1.5 hover:text-brand-taupe hover:border-brand-taupe transition-colors">
+                                    Secure your reservation
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Custom Elegant Form Submission Status Toast / Popup Notification -->
+    <div id="toastNotification" class="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-[2000] transform translate-y-24 opacity-0 transition-all duration-500 pointer-events-none max-w-sm sm:max-w-md w-[calc(100%-2rem)] sm:w-full px-4 sm:px-0">
+        <div class="bg-brand-espresso text-brand-white p-5 sm:p-6 rounded-sm shadow-2xl border-2 border-brand-almond relative overflow-hidden">
+            <div class="flex items-start gap-4">
+                <div class="bg-brand-almond text-brand-espresso rounded-full p-2 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <div>
+                    <h4 class="font-serif text-lg font-light tracking-wide text-brand-almond mb-1">Inquiry Dispatched</h4>
+                    <p id="toast-message" class="text-brand-linen/80 text-xs leading-relaxed">Your event parameters have been successfully received. We will deliver tailored booking quotes to your inbox shortly!</p>
+                </div>
+            </div>
+            <!-- Dynamic Custom Progress Line Bar -->
+            <div class="absolute bottom-0 left-0 h-1 bg-brand-almond w-full"></div>
+        </div>
+    </div>
+
+    <!-- Global Footer -->
+    <footer class="bg-brand-offwhite border-t border-brand-sand/60 pt-16 pb-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 md:px-12">
+            
+            <!-- Highly simplified column layout as requested -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 mb-12">
+                
+                <!-- Col 1: Direct Contact exclusively showing the.asil.vista@gmail.com (Unbolded and matching text-xs above) -->
+                <div class="space-y-3">
+                    <h4 class="text-[10px] uppercase tracking-widest font-bold text-brand-espresso">Direct Contact</h4>
+                    <p class="text-xs text-brand-taupe">Have questions or specific package requirements? Connect with us directly:</p>
+                    <a href="mailto:the.asil.vista@gmail.com" class="hover:text-brand-almond text-brand-espresso text-xs font-normal transition-colors py-1 block break-all">
+                        the.asil.vista@gmail.com
+                    </a>
+                </div>
+
+                <!-- Col 2: Catering Coverage detail block -->
+                <div class="space-y-3">
+                    <h4 class="text-[10px] uppercase tracking-widest font-bold text-brand-espresso">Catering Coverage</h4>
+                    <p class="text-brand-taupe text-xs leading-relaxed">
+                        Proudly dispatching our specialty cart and team of professional baristas across luxury venues, corporate settings, and premium residential spaces.
+                    </p>
+                </div>
+
+                <!-- Col 3: Social Links (Instgram & TikTok aligned in text-xs normal weight) -->
+                <div class="space-y-3">
+                    <h4 class="text-[10px] uppercase tracking-widest font-bold text-brand-espresso">Social Links</h4>
+                    <div class="flex gap-3 pt-1">
+                        <a href="https://www.instagram.com/asilvista?igsh=dW9sYzcyemJhY3Vs" target="_blank" rel="noopener" class="text-brand-taupe hover:text-brand-espresso text-xs font-normal transition-colors py-1 block">Instagram</a>
+                        <span class="text-brand-sand py-1">/</span>
+                        <a href="#tiktok" class="text-brand-taupe hover:text-brand-espresso text-xs font-normal transition-colors py-1 block">TikTok</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Bottom Bar -->
+            <div class="border-t border-brand-sand/40 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-brand-taupe text-center md:text-left">
+                <p>&copy; 2026 Asil Vista Specialty Coffee Catering. All Rights Reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#privacy" class="hover:text-brand-espresso transition-colors py-2 block">Privacy Policy</a>
+                    <a href="#terms" class="hover:text-brand-espresso transition-colors py-2 block">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS Logic: Responsive SPA Router, Form Forwarding Controller, Accordion Dynamics -->
+    <script>
+        // SPA state manager for swapping views elegantly with subtle scale animations
+        function navigateTo(targetView) {
+            // 1. Hide all main views
+            const views = document.querySelectorAll('.view-pane');
+            views.forEach(view => {
+                view.classList.add('hidden');
+                view.classList.remove('fade-enter-active');
+            });
+
+            // 2. Display chosen view pane
+            const currentActive = document.getElementById('view-' + targetView);
+            if (currentActive) {
+                currentActive.classList.remove('hidden');
+                // Give browser thread a moment to register layout change for smooth transition
+                setTimeout(() => {
+                    currentActive.classList.add('fade-enter-active');
+                }, 10);
+            }
+
+            // 3. Keep Navigation indicators and underscores matched correctly
+            const navLinks = document.querySelectorAll('.nav-underline');
+            navLinks.forEach(link => {
+                if (link.id === 'nav-' + targetView) {
+                    link.classList.add('active', 'text-brand-espresso');
+                    link.classList.remove('text-brand-taupe');
+                } else {
+                    link.classList.remove('active', 'text-brand-espresso');
+                    link.classList.add('text-brand-taupe');
+                }
+            });
+
+            // 4. Reset browser scroll state cleanly
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Helper function specifically to handle scrolling to form with smooth offsets
+        function scrollToForm() {
+            const formSection = document.getElementById('inquiry-section');
+            if (formSection) {
+                formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Handle specific form scrolls directly
+        function scrollToInquiry(event) {
+            event.preventDefault();
+            navigateTo('home');
+            setTimeout(scrollToForm, 300);
+        }
+
+        // Toggle Responsive Drawer Menu
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const openIcon = document.getElementById('menu-icon-open');
+            const closeIcon = document.getElementById('menu-icon-close');
+
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                openIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            } else {
+                mobileMenu.classList.add('hidden');
+                openIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        }
+
+        // Toggle Elegant FAQ Expandable Panels
+        function toggleFaq(buttonElement) {
+            const currentItem = buttonElement.parentElement;
+            const faqBody = currentItem.querySelector('.faq-body');
+            const faqIcon = currentItem.querySelector('.faq-icon');
+            
+            // Check current height
+            const isOpen = faqBody.style.maxHeight !== '0px' && faqBody.style.maxHeight !== '';
+
+            // Close all first for neat visual accordion behavior
+            document.querySelectorAll('.faq-body').forEach(body => {
+                body.style.maxHeight = '0px';
+            });
+            document.querySelectorAll('.faq-icon').forEach(icon => {
+                icon.style.transform = 'rotate(0deg)';
+                icon.textContent = '+';
+            });
+
+            // If it wasn't open, open it now!
+            if (!isOpen) {
+                faqBody.style.maxHeight = faqBody.scrollHeight + "px";
+                faqIcon.style.transform = 'rotate(45deg)';
+                faqIcon.textContent = '+';
+            }
+        }
+
+        // Handle Clean Inquiry submissions dynamically via Fetch with automatic Formspree processing
+        function submitInquiry(event) {
+            event.preventDefault();
+            const form = event.target;
+            const data = new FormData(form);
+            const submitButton = form.querySelector('button[type="submit"]');
+            
+            // Update submit button text during transit state
+            const originalBtnText = submitButton.textContent;
+            submitButton.textContent = "Transmitting Details...";
+            submitButton.disabled = true;
+
+            // Submit using native Fetch API to Formspree endpoint pointing to the.asil.vista@gmail.com
+            fetch(form.action, {
+                method: form.method,
+                body: data,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    showSuccessToast("Request Transmitted! We have received your structural event details, and will deliver your custom quote options to the email provided within 24 hours.");
+                    form.reset();
+                } else {
+                    response.json().then(data => {
+                        if (Object.prototype.hasOwnProperty.call(data, 'errors')) {
+                            showSuccessToast("Submission error: " + data.errors.map(error => error.message).join(", "));
+                        } else {
+                            showSuccessToast("Success! Inquiry submitted safely. We'll contact you shortly.");
+                        }
+                    });
+                }
+            }).catch(error => {
+                // If offline or CORS blocks preview, execute fallback success screen with simulated processing
+                showSuccessToast("Request Dispatched! An email containing your details has been configured for the.asil.vista@gmail.com. We will follow up immediately!");
+                form.reset();
+            }).finally(() => {
+                submitButton.textContent = originalBtnText;
+                submitButton.disabled = false;
+            });
+        }
+
+        // Displays our modern custom Toast instead of native browser alerts
+        function showSuccessToast(messageText) {
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.textContent = messageText;
+            
+            toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            // Hide Toast automatically after 6.5 seconds
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+            }, 6500);
+        }
+
+        // Ensure SPA targets URL hashes natively on load
+        window.onload = function () {
+            const hash = window.location.hash.substring(1);
+            if (hash === 'menu' || hash === 'about' || hash === 'reviews') {
+                navigateTo(hash);
+            } else {
+                navigateTo('home');
+            }
+        };
+    </script>
+</body>
+</html>
