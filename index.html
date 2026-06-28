@@ -259,6 +259,28 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- How Did You Hear About Us -->
+                            <div class="flex flex-col gap-1.5">
+                                <label for="heard_about" class="text-[10px] uppercase tracking-widest font-bold text-brand-espresso">How did you hear about us?</label>
+                                <div class="relative">
+                                    <select name="heard_about" id="heard_about" required class="w-full bg-brand-white border border-brand-sand focus:border-brand-almond focus:ring-2 focus:ring-brand-almond/30 px-4 py-3 text-base outline-none transition-all duration-200 appearance-none rounded-sm min-h-[48px]" onchange="toggleHeardAboutDetails(this.value)">
+                                        <option value="" disabled selected>Select an option</option>
+                                        <option value="Instagram">Instagram</option>
+                                        <option value="Tiktok">Tiktok</option>
+                                        <option value="Google Search">Google Search</option>
+                                        <option value="Vendor">Vendor</option>
+                                        <option value="Referral">Referral</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-brand-taupe">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
+                                <div id="heard-about-details" class="hidden mt-2">
+                                    <input type="text" name="heard_about_details" id="heard_about_details" placeholder="Please tell us more" required class="w-full bg-brand-white border border-brand-sand focus:border-brand-almond focus:ring-2 focus:ring-brand-almond/30 px-4 py-3 text-base outline-none transition-all duration-200 rounded-sm min-h-[48px]">
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Power Availability Option Buttons -->
@@ -372,8 +394,8 @@
                         <!-- Item 2 -->
                         <div class="bg-brand-offwhite border-t-4 border-t-brand-almond border-x border-b border-brand-sand/60 p-6 sm:p-8 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between rounded-sm">
                             <div>
-                                <h3 class="font-serif text-2xl font-normal text-brand-espresso mb-3">Salted Caramel Latte</h3>
-                                <p class="text-brand-taupe text-sm leading-relaxed mb-6">Our specialty-grade espresso elevated with handcrafted deep butter-caramel and premium flaky sea salt.</p>
+                                <h3 class="font-serif text-2xl font-normal text-brand-espresso mb-3">Asil Vista Special</h3>
+                                <p class="text-brand-taupe text-sm leading-relaxed mb-6">A signature house favorite built with bold espresso, caramel depth, and a luxurious finish that feels made just for your event.</p>
                             </div>
                             <span class="text-[10px] uppercase tracking-widest text-brand-espresso font-bold block mt-auto">House Classic</span>
                         </div>
@@ -381,8 +403,8 @@
                         <!-- Item 3 -->
                         <div class="bg-brand-offwhite border-t-4 border-t-brand-almond border-x border-b border-brand-sand/60 p-6 sm:p-8 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between rounded-sm">
                             <div>
-                                <h3 class="font-serif text-2xl font-normal text-brand-espresso mb-3">Biscoff Latte</h3>
-                                <p class="text-brand-taupe text-sm leading-relaxed mb-6">A spiced caramelized biscuit cream infusion layered directly beneath velvety, smooth milk micro-foam.</p>
+                                <h3 class="font-serif text-2xl font-normal text-brand-espresso mb-3">Chai Latte</h3>
+                                <p class="text-brand-taupe text-sm leading-relaxed mb-6">A cozy, spiced chai blend with silky steamed milk and a warm aromatic finish.</p>
                             </div>
                             <span class="text-[10px] uppercase tracking-widest text-brand-espresso font-bold block mt-auto">Comfort Blend</span>
                         </div>
@@ -390,10 +412,19 @@
                         <!-- Item 4 -->
                         <div class="bg-brand-offwhite border-t-4 border-t-brand-almond border-x border-b border-brand-sand/60 p-6 sm:p-8 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between rounded-sm">
                             <div>
-                                <h3 class="font-serif text-2xl font-normal text-brand-espresso mb-3">Tiramisu Latte</h3>
-                                <p class="text-brand-taupe text-sm leading-relaxed mb-6">Decadent cocoa and sweet mascarpone cheese notes harmonized beautifully with bold freshly-ground espresso.</p>
+                                <h3 class="font-serif text-2xl font-normal text-brand-espresso mb-3">Strawberry Matcha</h3>
+                                <p class="text-brand-taupe text-sm leading-relaxed mb-6">Bright strawberry notes layered over ceremonial matcha for a vibrant, refreshing sip.</p>
                             </div>
                             <span class="text-[10px] uppercase tracking-widest text-brand-espresso font-bold block mt-auto">Dessert Inspired</span>
+                        </div>
+
+                        <!-- Item 5 -->
+                        <div class="bg-brand-offwhite border-t-4 border-t-brand-almond border-x border-b border-brand-sand/60 p-6 sm:p-8 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between rounded-sm">
+                            <div>
+                                <h3 class="font-serif text-2xl font-normal text-brand-espresso mb-3">Mango Matcha</h3>
+                                <p class="text-brand-taupe text-sm leading-relaxed mb-6">Tropical mango sweetness balanced with smooth matcha for a bright, modern flavor.</p>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-widest text-brand-espresso font-bold block mt-auto">Fresh Favorite</span>
                         </div>
 
                     </div>
@@ -681,6 +712,22 @@
                 faqBody.style.maxHeight = faqBody.scrollHeight + "px";
                 faqIcon.style.transform = 'rotate(45deg)';
                 faqIcon.textContent = '+';
+            }
+        }
+
+        function toggleHeardAboutDetails(value) {
+            const detailsContainer = document.getElementById('heard-about-details');
+            const detailsInput = document.getElementById('heard_about_details');
+            if (value === 'Referral' || value === 'Other') {
+                detailsContainer.classList.remove('hidden');
+                detailsInput.required = true;
+                detailsInput.placeholder = value === 'Referral'
+                    ? 'Please tell us who referred you'
+                    : 'other';
+            } else {
+                detailsContainer.classList.add('hidden');
+                detailsInput.required = false;
+                detailsInput.value = '';
             }
         }
 
